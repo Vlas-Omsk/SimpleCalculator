@@ -108,17 +108,20 @@ void Calculator::RecursiveCalculateFunction(long position)
 		if (position + 1 >= (long)_tokens.size())
 			throw std::exception("Syntax error");
 
-		if (_tokens[position + 1].Type == MathTokenType::Number || _tokens[position + 1].Type == MathTokenType::String)
+		if (Operators::IsUnary(_tokens[position + 1].Type))
+			CalculateUnaryOperator(position + 1, position + 1, position + 2);
+
+		if (_tokens[position + 1].Type == MathTokenType::String)
 		{
-			if (_tokens[position + 1].Type == MathTokenType::String)
-			{
-				if (GetConstant(_tokens[position + 1].GetStringValue(), &value))
-					arguments.push_back(value);
-				else
-					throw std::exception("Syntax error");
-			}
+			if (GetConstant(_tokens[position + 1].GetStringValue(), &value))
+				ReplaceTokenRange(position + 1, position + 2, value);
 			else
-				arguments.push_back(_tokens[position + 1].GetNumberValue());
+				RecursiveCalculateFunction(position + 1);
+		}
+
+		if (_tokens[position + 1].Type == MathTokenType::Number)
+		{
+			arguments.push_back(_tokens[position + 1].GetNumberValue());
 			endPosition = position + 1;
 		}
 		else
@@ -185,6 +188,11 @@ double Calculator::CalculateFunction(std::string functionName, std::vector<doubl
 		if (functionName == "min")
 		{
 			*value = *std::min_element(arguments.begin(), arguments.end());
+			return true;
+		}
+		else if (functionName == "max")
+		{
+			*value = *std::max_element(arguments.begin(), arguments.end());
 			return true;
 		}
 	}

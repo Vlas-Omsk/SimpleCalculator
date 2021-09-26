@@ -127,7 +127,9 @@ void Lexer::ReadNumber()
 {
 	bool isDouble = false, isEnumber = false, isHexadecimal = false;
 	int previous = _current;
-	while (HasNext() && (IsNumberChar(GetNextChar()) || (isHexadecimal && IsHexadecimalChar(GetNextChar()))))
+	while (HasNext() && (IsNumberChar(GetNextChar()) ||
+		(isHexadecimal && IsHexadecimalChar(GetNextChar())) ||
+		((_current == 'e' || _current == 'E') && ((isEnumber && GetNextChar() == '-') || (isEnumber && GetNextChar() == '+')))))
 	{
 		previous = _current;
 		ReadNext();

@@ -30,6 +30,8 @@ void InputTests()
 	std::string input;
 	double result = 0;
 
+	cout.precision(20);
+
 	while (true)
 	{
 		cout << ForegroundColor(0xa9, 0xa9, 0xa9) << ">>> ";
@@ -38,7 +40,7 @@ void InputTests()
 		try
 		{
 			result = calculator.Calculate(input);
-			cout << ForegroundColor(0x9b, 0x87, 0x0c) << to_string(result);
+			cout << ForegroundColor(0x9b, 0x87, 0x0c) << result;
 		}
 		catch (std::exception ex)
 		{
