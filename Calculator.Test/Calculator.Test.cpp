@@ -3,6 +3,10 @@
 #include <iostream>
 #include <string>
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif // _WIN32
+
 using namespace std;
 
 void InputTests();
@@ -30,6 +34,12 @@ void InputTests()
 	std::string input;
 	double result = 0;
 
+#ifdef _WIN32
+	/*HANDLE consoleHadle = GetStdHandle(STD_INPUT_HANDLE);
+	DWORD consoleMode = 0;
+	if (GetConsoleMode(consoleHadle, &consoleMode))
+		SetConsoleMode(consoleHadle, consoleMode & ~ENABLE_VIRTUAL_TERMINAL_PROCESSING);*/
+#endif // _WIN32
 	cout.precision(20);
 
 	while (true)
