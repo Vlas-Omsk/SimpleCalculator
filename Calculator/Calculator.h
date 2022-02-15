@@ -23,7 +23,7 @@ private:
 	void RecursiveCalculate(long position, bool calledFromFunction);
 	void RecursiveCalculateFunction(long position);
 	bool GetConstant(std::string constantName, double* value);
-	double CalculateFunction(std::string functionName, std::vector<double> arguments, double* value);
+	bool CalculateFunction(std::string functionName, std::vector<double> arguments, double* value);
 	void CalculateOperators(long startPosition, long& endPosition);
 	short int CalculateBinaryOperator(long index, long startPosition, long endPosition);
 	short int CalculateUnaryOperator(long index, long startPosition, long endPosition);

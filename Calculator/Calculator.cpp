@@ -96,14 +96,14 @@ void Calculator::RecursiveCalculateFunction(long position)
 	std::vector<double> arguments;
 
 	double value = 0;
-	bool hasValue = false;
 	std::string functionName = _tokens[position].GetStringValue();
+	bool hasValue = GetConstant(functionName, &value);
 
-	hasValue = GetConstant(functionName, &value);
 	if (hasValue)
+	{
 		endPosition = startPosition;
-
-	if (!hasValue)
+	}
+	else
 	{
 		if (position + 1 >= (long)_tokens.size())
 			throw std::exception("Syntax error");
@@ -170,10 +170,15 @@ bool Calculator::GetConstant(std::string constantName, double* value)
 		*value = M_E;
 		return true;
 	}
+	else if (constantName == "dor")
+	{
+		*value = 7;
+		return true;
+	}
 	return false;
 }
 
-double Calculator::CalculateFunction(std::string functionName, std::vector<double> arguments, double* value)
+bool Calculator::CalculateFunction(std::string functionName, std::vector<double> arguments, double* value)
 {
 	if (arguments.size() == 1)
 	{
