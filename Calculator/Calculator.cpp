@@ -170,11 +170,6 @@ bool Calculator::GetConstant(std::string constantName, double* value)
 		*value = M_E;
 		return true;
 	}
-	else if (constantName == "dor")
-	{
-		*value = 7;
-		return true;
-	}
 	return false;
 }
 
