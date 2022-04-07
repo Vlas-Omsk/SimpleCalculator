@@ -35,10 +35,10 @@ void InputTests()
 	double result = 0;
 
 #ifdef _WIN32
-	/*HANDLE consoleHadle = GetStdHandle(STD_INPUT_HANDLE);
+	HANDLE consoleHadle = GetStdHandle(STD_OUTPUT_HANDLE);
 	DWORD consoleMode = 0;
 	if (GetConsoleMode(consoleHadle, &consoleMode))
-		SetConsoleMode(consoleHadle, consoleMode & ~ENABLE_VIRTUAL_TERMINAL_PROCESSING);*/
+		SetConsoleMode(consoleHadle, consoleMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
 #endif // _WIN32
 	cout.precision(20);
 
