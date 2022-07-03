@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "Math.h"
 
-#include <yvals_core.h>
+#define _CSTD ::
 #include <stdlib.h>
+#include <cerrno>
 
 bool Math::TryParseDouble(const char* str, double* value)
 {

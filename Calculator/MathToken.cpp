@@ -2,6 +2,8 @@
 #include "MathToken.h"
 #include "MathTokenTypes.h"
 
+#include <stdexcept>
+
 MathToken::MathToken()
 {
 	Type = MathTokenType::Invalid;
@@ -20,7 +22,7 @@ MathToken::MathToken(MathTokenType type, int position, int length, void* value)
 
 void MathToken::ThrowNonConvertible(MathTokenType tokenType)
 {
-	throw std::exception(("Unable to convert MathTokenType::" + MathTokenTypes::GetName(Type) + " to MathTokenType::" + MathTokenTypes::GetName(tokenType)).c_str());
+	throw std::runtime_error(("Unable to convert MathTokenType::" + MathTokenTypes::GetName(Type) + " to MathTokenType::" + MathTokenTypes::GetName(tokenType)).c_str());
 }
 
 double MathToken::GetNumberValue()

@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "MathTokenTypes.h"
 
+#include <stdexcept>
+
 std::string MathTokenTypes::GetName(MathTokenType tokenType)
 {
 	switch (tokenType)
@@ -32,6 +34,6 @@ std::string MathTokenTypes::GetName(MathTokenType tokenType)
 		case MathTokenType::Fact:
 			return "Fact";
 		default:
-			throw std::exception("Unknown token type");
+			throw std::runtime_error("Unknown token type");
 	}
 }

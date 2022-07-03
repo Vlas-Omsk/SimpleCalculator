@@ -52,7 +52,7 @@ void InputTests()
 			result = calculator.Calculate(input);
 			cout << ForegroundColor(0x9b, 0x87, 0x0c) << result;
 		}
-		catch (std::exception ex)
+		catch (std::runtime_error ex)
 		{
 			cout << ForegroundColor(0x8b, 0x00, 0x00) << ex.what();
 		}

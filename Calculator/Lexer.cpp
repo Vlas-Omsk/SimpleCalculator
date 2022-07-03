@@ -4,6 +4,7 @@
 #include "MathTokenType.h"
 
 #include <algorithm>
+#include <stdexcept>
 
 Lexer::Lexer(IStreamReader* streamReader)
 {
@@ -137,21 +138,21 @@ void Lexer::ReadNumber()
 		if (GetCurrentChar() == '.' && !isHexadecimal)
 		{
 			if (isDouble)
-				throw std::exception("Invalid double number");
+				throw std::runtime_error("Invalid double number");
 			else
 				isDouble = true;
 		}
 		if ((GetCurrentChar() == 'e' || GetCurrentChar() == 'E') && !isHexadecimal)
 		{
 			if (isEnumber)
-				throw std::exception("Invalid e number");
+				throw std::runtime_error("Invalid e number");
 			else
 				isEnumber = true;
 		}
 		if (GetCurrentChar() == 'x' || GetCurrentChar() == 'X')
 		{
 			if (isHexadecimal || previous != '0' || _buffer.size() > 2)
-				throw std::exception("Invalid hexadecimal number");
+				throw std::runtime_error("Invalid hexadecimal number");
 			else
 				isHexadecimal = true;
 		}
@@ -162,7 +163,7 @@ void Lexer::ReadNumber()
 	if (!Math::TryParseDouble(_buffer.c_str(), (double*)_token.Value))
 	{
 		delete _token.Value;
-		throw std::exception(("Invalid or too big number " + _buffer).c_str());
+		throw std::runtime_error(("Invalid or too big number " + _buffer).c_str());
 	}
 	_token.Type = MathTokenType::Number;
 }
@@ -186,7 +187,7 @@ bool Lexer::MoveNext()
 	{
 		Get();
 		if (_token.Type == MathTokenType::Invalid)
-			throw std::exception("InvalidTokenException");
+			throw std::runtime_error("InvalidTokenException");
 		if (SkipInvisible && _token.Type == MathTokenType::Invisible)
 			MoveNext();
 		return true;

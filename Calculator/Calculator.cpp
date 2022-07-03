@@ -6,6 +6,7 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <stdexcept>
 
 Calculator::Calculator()
 {
@@ -34,7 +35,7 @@ double Calculator::Calculate(std::vector<MathToken> tokens)
 
 	RecursiveCalculate(0, false);
 	if (_tokens.size() != 1 || _tokens[0].Type != MathTokenType::Number)
-		throw std::exception("Syntax error");
+		throw std::runtime_error("Syntax error");
 	double result = _tokens[0].GetNumberValue();
 
 	_tokens.clear();
@@ -67,7 +68,7 @@ void Calculator::RecursiveCalculate(long position, bool calledFromFunction)
 		if (_tokens[i].Type == MathTokenType::CloseBracket || (calledFromFunction && _tokens[i].Type == MathTokenType::Comma))
 		{
 			if (_generation == 1)
-				throw std::exception("Syntax error");
+				throw std::runtime_error("Syntax error");
 			endPosition = i;
 			break;
 		}
@@ -75,7 +76,7 @@ void Calculator::RecursiveCalculate(long position, bool calledFromFunction)
 	if (_generation != 1)
 	{
 		if (endPosition == 0)
-			throw std::exception("Syntax error");
+			throw std::runtime_error("Syntax error");
 	}
 	else
 		endPosition = _tokens.size() - 1;
@@ -106,7 +107,7 @@ void Calculator::RecursiveCalculateFunction(long position)
 	else
 	{
 		if (position + 1 >= (long)_tokens.size())
-			throw std::exception("Syntax error");
+			throw std::runtime_error("Syntax error");
 
 		if (Operators::IsUnary(_tokens[position + 1].Type))
 			CalculateUnaryOperator(position + 1, position + 1, position + 2);
@@ -131,10 +132,10 @@ void Calculator::RecursiveCalculateFunction(long position)
 				if (_tokens[i].Type == MathTokenType::Comma || _tokens[i].Type == MathTokenType::OpenBracket)
 				{
 					if (_tokens[i].Type == MathTokenType::OpenBracket && i != position + 1)
-						throw std::exception("Syntax error");
+						throw std::runtime_error("Syntax error");
 					RecursiveCalculate(i + 1, true);
 					if (_tokens[i + 1].Type != MathTokenType::Number)
-						throw std::exception("Internal error");
+						throw std::runtime_error("Internal error");
 					arguments.push_back(_tokens[i + 1].GetNumberValue());
 				}
 				if (_tokens[i].Type == MathTokenType::CloseBracket)
@@ -144,14 +145,14 @@ void Calculator::RecursiveCalculateFunction(long position)
 				}
 			}
 			if (endPosition == 0)
-				throw std::exception("Syntax error");
+				throw std::runtime_error("Syntax error");
 		}
 
 		hasValue = CalculateFunction(functionName, arguments, &value);
 	}
 
 	if (!hasValue)
-		throw std::exception("No function found with such parameters");
+		throw std::runtime_error("No function found with such parameters");
 
 	ReplaceTokenRange(startPosition, endPosition + 1, value);
 
@@ -226,9 +227,9 @@ void Calculator::CalculateOperators(long startPosition, long& endPosition)
 short int Calculator::CalculateBinaryOperator(long index, long startPosition, long endPosition)
 {
 	if (index + 1 > endPosition || _tokens[index + 1].Type != MathTokenType::Number)
-		throw std::exception("Syntax error");
+		throw std::runtime_error("Syntax error");
 	if (index - 1 < startPosition || _tokens[index - 1].Type != MathTokenType::Number)
-		throw std::exception("Syntax error");
+		throw std::runtime_error("Syntax error");
 
 	double value = 0;
 
@@ -253,7 +254,7 @@ short int Calculator::CalculateBinaryOperator(long index, long startPosition, lo
 			value = pow(left, right);
 			break;
 		default:
-			throw std::exception("Internal error");
+			throw std::runtime_error("Internal error");
 	}
 
 	ReplaceTokenRange(index - 1, index + 2, value);
@@ -273,7 +274,7 @@ short int Calculator::CalculateUnaryOperator(long index, long startPosition, lon
 			if (index - 1 >= startPosition && _tokens[index - 1].Type == MathTokenType::Number)
 				return 0;
 			if (index + 1 > endPosition || _tokens[index + 1].Type != MathTokenType::Number)
-				throw std::exception("Syntax error");
+				throw std::runtime_error("Syntax error");
 
 			value = _tokens[index + 1].GetNumberValue();
 			length = 2;
@@ -290,14 +291,14 @@ short int Calculator::CalculateUnaryOperator(long index, long startPosition, lon
 		case MathTokenType::Fact:
 			if (index - 1 < startPosition || _tokens[index - 1].Type != MathTokenType::Number ||
 				(index + 1 <= endPosition && _tokens[index + 1].Type == MathTokenType::Number))
-				throw std::exception("Syntax error");
+				throw std::runtime_error("Syntax error");
 
 			value = Math::Fact((int)_tokens[index - 1].GetNumberValue());
 			index--;
 			length = 2;
 			break;
 		default:
-			throw std::exception("Internal error");
+			throw std::runtime_error("Internal error");
 	}
 
 	ReplaceTokenRange(index, index + length, value);

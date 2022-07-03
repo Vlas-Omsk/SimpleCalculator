@@ -1,5 +1,7 @@
 ﻿#include "pch.h"
 
+#ifdef _WIN32
+
 BOOL APIENTRY DllMain(
     HMODULE hModule,
     DWORD  ul_reason_for_call,
@@ -16,4 +18,6 @@ BOOL APIENTRY DllMain(
     }
     return TRUE;
 }
+
+#endif // _WIN32
 
